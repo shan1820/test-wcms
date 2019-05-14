@@ -4,7 +4,7 @@
 ############################################################
 
 # Set the base image to Ubuntu
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 # Allows installing of packages without prompting the user to answer any questions
 ENV DEBIAN_FRONTEND noninteractive
@@ -35,26 +35,23 @@ RUN apt-get install -y \
     vim \
     git \
     apache2 \
-    php5.6 \
-    php5.6-apc \
-    php5.6-fpm \
-    php5.6-xml \
-    php5.6-simplexml \
-    php5.6-mbstring \
-    php5.6-cli \
-    php5.6-mysql \
-    php5.6-gd \
-    php5.6-curl \
-    php5.6-ldap \
-    php5.6-mcrypt \
-    php5.6-zip \
+    php7.2 \
+    php7.2-apc \
+    php7.2-fpm \
+    php7.2-xml \
+    php7.2-simplexml \
+    php7.2-mbstring \
+    php7.2-cli \
+    php7.2-mysql \
+    php7.2-gd \
+    php7.2-curl \
+    php7.2-ldap \
+    php7.2-zip \
     php-pear \
-    libapache2-mod-php5.6 \
+    libapache2-mod-php7.2 \
     optipng \
-    pdftk \
     jpegoptim \
     imagemagick \
-    libapache2-mod-fcgid \
     libapache2-mod-fastcgi \
     curl \
     nano \
@@ -67,6 +64,14 @@ RUN apt-get install -y \
     dos2unix \
     supervisor
 
+## pdftk is no longer part of Ubuntu 18.04 repo to add it:
+RUN wget http://ftp.br.debian.org/debian/pool/main/p/pdftk/pdftk_2.02-4+b2_amd64.deb && \ 
+    wget http://ftp.br.debian.org/debian/pool/main/g/gcc-defaults/libgcj-common_6.3-4_all.deb && \ 
+    wget http://ftp.br.debian.org/debian/pool/main/g/gcc-6/libgcj17_6.3.0-18+deb9u1_amd64.deb && \ 
+    dpkg -i pdftk_2.02-4+b2_amd64.deb libgcj17_6.3.0-18+deb9u1_amd64.deb libgcj-common_6.3-4_all.deb
+
+RUN apt-get clean
+
 RUN apt-get clean
 
 ## enable rewrite and ssl for apache2
@@ -75,12 +80,6 @@ RUN a2enmod ssl
 
 ## for Content Security Policy (CSP).
 RUN a2enmod headers
-
-## fcgid needed to run multiple versions of PHP under the same apache.
-## RUN a2enmod fcgid
-
-## enable mcrypt
-RUN phpenmod mcrypt
 
 ## add upload progress
 RUN apt-get install php-uploadprogress
@@ -104,12 +103,12 @@ ENV APACHE_PID_FILE /var/run/apache2.pid
 
 ## Enable apache mods
 RUN a2enmod proxy_fcgi setenvif
-RUN a2enconf php5.6-fpm
-RUN service php5.6-fpm restart
+RUN a2enconf php7.2-fpm
+RUN service php7.2-fpm restart
 
 ## Make sure we are running php we selected
-RUN update-alternatives --set php /usr/bin/php5.6
-RUN a2enmod php5.6
+RUN update-alternatives --set php /usr/bin/php7.2
+RUN a2enmod php7.2
 
 ## Install the drush registry_rebuild module
 RUN drush @none dl registry_rebuild-7.x
