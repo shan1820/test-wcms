@@ -26,14 +26,14 @@ RUN LC_ALL=en_US.UTF-8 add-apt-repository -y ppa:ondrej/php
 ## Add the git repo so we can get the latest git (we need 2.9.2+)
 RUN add-apt-repository ppa:git-core/ppa
 
-RUN apt-get update
-
 ## Added so we can install 6.x branch of nodejs.
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 
 ## Adding repo for libapache2-mod-fastcgi
 RUN wget https://mirrors.edge.kernel.org/ubuntu/pool/multiverse/liba/libapache-mod-fastcgi/libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb \
     dpkg -i libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb
+    
+RUN apt-get update
 
 ## Install packages.
 RUN apt-get install -y \
