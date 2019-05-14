@@ -1,12 +1,12 @@
 ############################################################
 # Dockerfile to build WCMS container images
-# Based on Ubuntu Xenial
+# Based on Ubuntu Bionic
 ############################################################
 
-# Set the base image to Ubuntu
+## Set the base image to Ubuntu
 FROM ubuntu:bionic
 
-# Allows installing of packages without prompting the user to answer any questions
+## Allows installing of packages without prompting the user to answer any questions
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
@@ -27,10 +27,14 @@ RUN add-apt-repository ppa:git-core/ppa
 
 RUN apt-get update
 
-# Added so we can install 6.x branch of nodejs.
+## Added so we can install 6.x branch of nodejs.
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 
-# Install packages.
+## Adding repo for libapache2-mod-fastcgi
+RUN wget https://mirrors.edge.kernel.org/ubuntu/pool/multiverse/liba/libapache-mod-fastcgi/libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb \
+    dpkg -i libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb
+
+## Install packages.
 RUN apt-get install -y \
     vim \
     git \
@@ -49,10 +53,10 @@ RUN apt-get install -y \
     php7.2-zip \
     php-pear \
     libapache2-mod-php7.2 \
+    libapache2-mod-fcgid \
     optipng \
     jpegoptim \
     imagemagick \
-    libapache2-mod-fastcgi \
     curl \
     nano \
     mysql-client \
@@ -84,17 +88,17 @@ RUN a2enmod headers
 ## add upload progress
 RUN apt-get install php-uploadprogress
 
-# Install Composer.
+## Install Composer.
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-# Install Drush 8.
+##Install Drush 8.
 RUN composer global require drush/drush:8.*
 RUN composer global update
-# Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
+## Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
 RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
 
-# Manually set up the apache environment variables
+## Manually set up the apache environment variables
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
@@ -102,7 +106,6 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 
 ## Enable apache mods
-RUN a2enmod proxy_fcgi setenvif
 RUN a2enconf php7.2-fpm
 RUN service php7.2-fpm restart
 
