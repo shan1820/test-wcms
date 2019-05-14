@@ -14,6 +14,7 @@ RUN apt-get update && \
     software-properties-common \
     language-pack-en \
     curl \
+    wget \
     apt-transport-https
 
 ## Add the repo to get the latest PHP versions
@@ -61,7 +62,6 @@ RUN apt-get install -y \
     nano \
     mysql-client \
     openssh-server \
-    wget \
     ruby-sass \
     ruby-compass \
     nodejs \
