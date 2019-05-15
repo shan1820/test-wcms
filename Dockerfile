@@ -61,7 +61,9 @@ RUN apt-get install -y \
     ruby-compass \
     nodejs \
     dos2unix \
-    supervisor
+    supervisor \
+    gcc-6-base \
+    libasound2
 
 ## pdftk is no longer part of Ubuntu 18.04 repo to add it:
 RUN wget http://ftp.br.debian.org/debian/pool/main/p/pdftk/pdftk_2.02-4+b2_amd64.deb && \ 
@@ -97,10 +99,6 @@ ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
-
-## Enable apache mods
-RUN a2enconf php7.2-fpm
-RUN service php7.2-fpm restart
 
 ## Make sure we are running php we selected
 RUN update-alternatives --set php /usr/bin/php7.2
