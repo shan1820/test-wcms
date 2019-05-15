@@ -28,10 +28,6 @@ RUN add-apt-repository ppa:git-core/ppa
 
 ## Added so we can install 6.x branch of nodejs.
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-
-## Adding repo for libapache2-mod-fastcgi
-RUN wget https://mirrors.edge.kernel.org/ubuntu/pool/multiverse/liba/libapache-mod-fastcgi/libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb \
-    dpkg -i libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb
     
 RUN apt-get update
 
@@ -54,7 +50,6 @@ RUN apt-get install -y \
     php7.2-zip \
     php-pear \
     libapache2-mod-php7.2 \
-    libapache2-mod-fcgid \
     optipng \
     jpegoptim \
     imagemagick \
