@@ -59,7 +59,7 @@ RUN apt-get install -y \
     openssh-server \
     ruby-sass \
     ruby-compass \
-    nodejs \
+    nodejs=6.14.1-1nodesource1 \
     dos2unix \
     supervisor \
     gcc-6-base \
